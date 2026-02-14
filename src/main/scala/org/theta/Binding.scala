@@ -10,8 +10,6 @@ object Binding {
 
 class Binding(val arguments:Map[String, Variable], val onMatch: () => Unit) {
 
-  def size: Int = arguments.size
-
   def push(block: => Unit): Unit = {
     val values: Map[String, Option[Any]] = arguments.map { (key, value) =>
       (key, value.value)
