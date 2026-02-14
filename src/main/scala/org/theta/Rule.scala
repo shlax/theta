@@ -3,16 +3,18 @@ package org.theta
 /**
  * bird(x) => can-fly(x) & animal(x)
  */
-class Rule(override val relation:String, val arguments:Map[String, Atom]) extends Term {
+class Rule(override val relation:String, val parameters:Map[String, Atom]) extends Term {
 
-  val statements:List[Rule] = Nil
+  override def arguments: Set[String] = parameters.keySet
 
-  def evaluate(binding: Binding, stack:List[Rule])(callback : => Unit): Unit = {
+  val statements:List[Statement] = Nil
+
+  def evaluate(binding: Binding, stack:List[Statement])(callback : => Unit): Unit = {
     stack match {
       case Nil =>
         callback
       case head :: tail =>
-        for(candidate <- binding.query(_.relation == head.relation) ){
+        for(candidate <- binding.query(head.matches) ){
           binding.push {
             val context = head.arguments.map{ (k, v) =>
               v match {
@@ -30,7 +32,7 @@ class Rule(override val relation:String, val arguments:Map[String, Atom]) extend
   }
 
   override def evaluate(binding: Binding)(callback : => Unit): Unit = {
-    val values = arguments.flatMap { (k, v) =>
+    val values = parameters.flatMap { (k, v) =>
       v match {
         case x : Value => Some(k -> x)
         case _ => None
@@ -40,7 +42,7 @@ class Rule(override val relation:String, val arguments:Map[String, Atom]) extend
     binding.push {
       // check if signature matches binding
       if( values.forall { (key, atom) => binding.merge(key, atom) } ){
-        var variables = arguments.flatMap{ (k, v) =>
+        var variables = parameters.flatMap{ (k, v) =>
           v match {
             case Reference => Some(k -> binding(k))
             case _ => None

@@ -3,7 +3,9 @@ package org.theta
 trait Term {
 
   def relation:String
-  
-  def evaluate(binding: Binding)(callback : => Unit): Unit 
+
+  def arguments:Set[String]
+
+  def evaluate(binding: Binding)(callback : => Unit): Unit
   
 }
