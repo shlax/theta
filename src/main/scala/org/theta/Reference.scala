@@ -1,3 +1,3 @@
 package org.theta
 
-case class Reference(name:String) extends Atom
+case object Reference extends Atom
