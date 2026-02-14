@@ -3,8 +3,8 @@ package org.theta
 /**
  * capital(country:austria, city:vienna)
  */
-case class Fact(relation:String, arguments:Map[String, Value]) extends Term{
-
+case class Fact(override val relation:String, arguments:Map[String, Value]) extends Term{
+  
   /** check if signature matches binding */
   def evaluate(binding: Binding)(callback : => Unit): Unit = {
     binding.push {
