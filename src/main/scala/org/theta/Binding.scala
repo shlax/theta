@@ -1,19 +1,17 @@
 package org.theta
 
-class Binding(val id:String, val arguments:Map[String, Atom]) {
+class Binding(val arguments:Map[String, Atom], val onMatch: () => Unit) {
   def size: Int = arguments.size
 
-  def state: State = new State
-
-  class State {
+  def push(block: => Unit): Unit = {
     val values: Map[String, Option[Any]] = arguments.flatMap { (key, value) =>
       if(value.save) Some(key, value.get) else None
     }
 
-    def restore(): Unit = {
-      for((key, value) <- values){
-        arguments(key).restore(value)
-      }
+    block
+
+    for((key, value) <- values){
+      arguments(key).restore(value)
     }
   }
 

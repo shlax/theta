@@ -2,14 +2,14 @@ package org.theta
 
 class Database extends Queryable {
 
-  var rules: List[Rule] = Nil
+  var rules: List[Fact] = Nil
 
-  def add(rule: Rule): this.type = {
+  def add(rule: Fact): this.type = {
     rules = rule :: rules
     this
   }
 
-  override def query(test: Rule => Boolean): List[Rule] = {
+  override def query(test: Fact => Boolean): List[Fact] = {
     rules.filter(test)
   }
 
