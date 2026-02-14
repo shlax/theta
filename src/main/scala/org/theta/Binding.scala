@@ -2,15 +2,19 @@ package org.theta
 
 object Binding {
 
-  def apply(arguments:Map[String, Variable], onMatch: => Unit): Binding = {
-    new Binding(arguments, { () => onMatch } )
+  def apply(arguments:Map[String, Variable], parent:Binding): Binding = {
+    new Binding(arguments, parent.database )
+  }
+
+  def apply(arguments:Map[String, Variable], database: Database): Binding = {
+    new Binding(arguments, database)
   }
 
 }
 
-class Binding(val state:Map[String, Variable], val onMatch: () => Unit, val parent:Option[Binding] = None) {
+class Binding(val state:Map[String, Variable], val database: Database) extends Queryable {
 
-  def push(block: => Unit): Unit = {
+  def push(block : => Unit): Unit = {
     val values = state.map { (key, value) =>
       (key, value.value)
     }
@@ -22,10 +26,6 @@ class Binding(val state:Map[String, Variable], val onMatch: () => Unit, val pare
     }
   }
 
-  def map(fn: => Unit): Binding = {
-    new Binding(state, { () => fn }, Some(this) )
-  }
-
   def merge(key:String, value: Value): Boolean = {
     state.get(key) match {
       case Some(v) => v.set(value)
@@ -33,8 +33,8 @@ class Binding(val state:Map[String, Variable], val onMatch: () => Unit, val pare
     }
   }
 
-  def solved: Boolean = {
-    state.forall( _._2.value.isDefined ) && parent.forall( _.solved )
+  override def query(test: Term => Boolean): List[Term] = {
+    database.query(test)
   }
 
 }

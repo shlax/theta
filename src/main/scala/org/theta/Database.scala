@@ -1,6 +1,6 @@
 package org.theta
 
-class Database{
+class Database extends Queryable{
 
   var terms: List[Term] = Nil
 
@@ -9,7 +9,7 @@ class Database{
     this
   }
 
-  def query(test: Term => Boolean): List[Term] = {
+  override def query(test: Term => Boolean): List[Term] = {
     terms.filter(test)
   }
 

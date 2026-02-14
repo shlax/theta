@@ -8,16 +8,17 @@ class BaseTests {
   def ruleTest01(): Unit = {
     val country = Variable()
     val city = Variable()
+    val binding = Binding(Map("country" -> country, "city" -> city), Database())
+
+    val rule = Fact("capital", Map("country" -> Value("austria"), "city" -> Value("vienna")))
 
     var res = false
-    val binding = Binding(Map("country" -> country, "city" -> city), {
+    rule.evaluate(binding){
       Assertions.assertEquals("austria", country.resolve)
       Assertions.assertEquals("vienna", city.resolve)
       res = true
-    })
+    }
 
-    val rule = Fact("capital", Map("country" -> Value("austria"), "city" -> Value("vienna")))
-    rule.evaluate(binding)
     Assertions.assertTrue(res)
   }
 
@@ -26,17 +27,20 @@ class BaseTests {
     val country = Variable()
 
     var res = false
-    val binding = Binding(Map("country" -> country, "city" -> Variable("vienna")), {
-      Assertions.assertEquals("austria", country.resolve)
-      res = true
-    })
+    val binding = Binding(Map("country" -> country, "city" -> Variable("vienna")), Database())
 
     val ruleFail = Fact("capital", Map("country" -> Value("italy"), "city" -> Value("rome")))
-    ruleFail.evaluate(binding)
+    ruleFail.evaluate(binding){
+      Assertions.assertEquals("austria", country.resolve)
+      res = true
+    }
     Assertions.assertFalse(res)
 
     val ruleOk = Fact("capital", Map("country" -> Value("austria"), "city" -> Value("vienna")))
-    ruleOk.evaluate(binding)
+    ruleOk.evaluate(binding){
+      Assertions.assertEquals("austria", country.resolve)
+      res = true
+    }
     Assertions.assertTrue(res)
 
   }

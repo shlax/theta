@@ -6,10 +6,10 @@ package org.theta
 case class Fact(relation:String, arguments:Map[String, Value]) extends Term{
 
   /** check if signature matches binding */
-  def evaluate(binding: Binding): Unit = {
+  def evaluate(binding: Binding)(callback : => Unit): Unit = {
     binding.push {
-      if (arguments.forall { (key, atom) => binding.merge(key, atom) } && binding.solved ) {
-        binding.onMatch()
+      if (arguments.forall { (key, atom) => binding.merge(key, atom) } ) {
+        callback
       }
     }
   }
