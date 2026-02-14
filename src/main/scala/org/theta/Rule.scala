@@ -3,13 +3,12 @@ package org.theta
 /**
  * bird(X) => can-fly(X) & animal(X)
  */
-class Rule(relation:String, arguments:Map[String, Atom]) extends Fact(relation, arguments) {
+class Rule(val relation:String, arguments:Map[String, Atom]) extends Term {
 
-  val statements:List[Fact] = Nil
+  val statements:List[Rule] = Nil
 
-  override def evaluate(binding: Binding, queryable: Queryable): Unit = {
+  override def evaluate(binding: Binding): Unit = {
 
-    super.evaluate(binding, queryable)
   }
 
 }

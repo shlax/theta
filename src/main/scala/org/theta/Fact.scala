@@ -3,11 +3,7 @@ package org.theta
 /**
  * capital(country:austria, city:vienna)
  */
-case class Fact(relation:String, arguments:Map[String, Atom]){
-
-  def evaluate(binding: Binding, queryable: Queryable): Unit = {
-    evaluate(binding)
-  }
+case class Fact(relation:String, arguments:Map[String, Value]) extends Term{
 
   /** check if signature matches binding */
   def evaluate(binding: Binding): Unit = {

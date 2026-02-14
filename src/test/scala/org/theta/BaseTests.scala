@@ -10,7 +10,7 @@ class BaseTests {
     val city = Variable()
 
     var res = false
-    val binding = Binding(Map("country" -> country, "city" -> city), { () =>
+    val binding = Binding(Map("country" -> country, "city" -> city), {
       Assertions.assertEquals("austria", country.resolve)
       Assertions.assertEquals("vienna", city.resolve)
       res = true
@@ -26,7 +26,7 @@ class BaseTests {
     val country = Variable()
 
     var res = false
-    val binding = Binding(Map("country" -> country, "city" -> Value("vienna")), { () =>
+    val binding = Binding(Map("country" -> country, "city" -> Variable("vienna")), {
       Assertions.assertEquals("austria", country.resolve)
       res = true
     })

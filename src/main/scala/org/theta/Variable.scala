@@ -1,22 +1,27 @@
 package org.theta
 
-class Variable extends Atom {
-  var value:Option[Any] = None
+object Variable {
 
-  def set(v:Atom):Boolean = value match {
-    case s:Some[Any] => s == v.get
-    case None =>
-      value = v.get
-      true
+  def apply():Variable = {
+    new Variable()
   }
 
-  override def save: Boolean = true
+  def apply(v:Any):Variable ={
+    new Variable(Some(v))
+  }
 
-  override def restore(v: Option[Any]): Unit = {
-    value = v
+}
+
+class Variable(v:Option[Any] = None){
+  var value:Option[Any] = v
+
+  def set(v:Value):Boolean = value match {
+    case Some(x) => x == v.value
+    case None =>
+      value = Some(v.value)
+      true
   }
 
   def resolve: Any = value.get
 
-  override def get: Option[Any] = value
 }
