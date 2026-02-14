@@ -1,11 +1,18 @@
 plugins {
     scala
     java
+//  idea
 }
 
 repositories {
     mavenCentral()
 }
+
+//idea {
+//    module {
+//        setDownloadSources(true)
+//    }
+//}
 
 java{
     sourceCompatibility = JavaVersion.VERSION_25
@@ -24,7 +31,4 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
-tasks.test{
-    useJUnitPlatform()
-}
 
