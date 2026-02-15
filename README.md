@@ -1,0 +1,1 @@
+Mini prolog implementation for scala
