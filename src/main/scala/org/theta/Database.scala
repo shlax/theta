@@ -5,8 +5,9 @@ object Database {
   class DatabaseBuilder {
     var terms: List[Term] = Nil
 
-    def << (term: Term): Unit = {
+    def add(term: Term): this.type = {
       terms = term :: terms
+      this
     }
   }
 
@@ -17,33 +18,34 @@ object Database {
   }
 
   def add(term: Term)(using tb: DatabaseBuilder): Unit = {
-    tb << term
+    tb.add(term)
   }
 
   def fact(relation:String, parameters:Map[String, Value])(using tb: DatabaseBuilder): Unit = {
-    tb << Fact(relation, parameters)
+    tb.add(Fact(relation, parameters))
   }
 
   class RuleBuilder {
     var statements: List[Statement] = Nil
 
-    def << (statement: Statement): Unit = {
+    def add(statement: Statement): this.type = {
       statements = statement :: statements
+      this
     }
   }
 
   def rule(relation:String, parameters:Map[String, Atom])(init: RuleBuilder ?=> Unit)(using tb: DatabaseBuilder): Unit = {
     given rb : RuleBuilder = new RuleBuilder()
     init
-    tb << Rule(relation, parameters, rb.statements)
+    tb.add(Rule(relation, parameters, rb.statements))
   }
 
   def add(statement: Statement)(using tb: RuleBuilder): Unit = {
-    tb << statement
+    tb.add(statement)
   }
 
   def statement(relation:String, arguments:Map[String, Atom])(using tb: RuleBuilder): Unit = {
-    tb << Statement(relation, arguments)
+    tb.add(Statement(relation, arguments))
   }
 
   def apply(t: Term *): Database = {
