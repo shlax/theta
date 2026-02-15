@@ -1,1 +1,1 @@
-Mini prolog implementation for scala
+Mini prolog like implementation in scala
