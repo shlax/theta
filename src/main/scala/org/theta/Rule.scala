@@ -14,19 +14,14 @@ case class Rule(override val relation:String,
       case Nil =>
         callback
       case head :: tail =>
-        for(candidate <- binding.query(head.matches) ){
-          binding.push {
-            val context = head.arguments.map{ (k, v) =>
-              v match {
-                case Value(v) => k -> Variable(v)
-                case Reference(nm) => k -> binding(nm)
-              }
-            }
-            val statementBinding = Binding(context, binding)
-            candidate.evaluate(statementBinding){
-              evaluate(binding, tail)(callback)
-            }
+        val context = head.arguments.map { (k, v) =>
+          v match {
+            case Value(v) => k -> Variable(v)
+            case Reference(nm) => k -> binding(nm)
           }
+        }
+        head.evaluate(Binding(context, binding)){
+          evaluate(binding, tail)(callback)
         }
     }
   }
