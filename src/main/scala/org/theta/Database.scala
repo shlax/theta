@@ -16,6 +16,10 @@ object Database {
     Database(db.terms)
   }
 
+  def add(term: Term)(using tb: DatabaseBuilder): Unit = {
+    tb << term
+  }
+
   def fact(relation:String, parameters:Map[String, Value])(using tb: DatabaseBuilder): Unit = {
     tb << Fact(relation, parameters)
   }
@@ -32,6 +36,10 @@ object Database {
     given rb : RuleBuilder = new RuleBuilder()
     init
     tb << Rule(relation, parameters, rb.statements)
+  }
+
+  def add(statement: Statement)(using tb: RuleBuilder): Unit = {
+    tb << statement
   }
 
   def statement(relation:String, arguments:Map[String, Atom])(using tb: RuleBuilder): Unit = {
