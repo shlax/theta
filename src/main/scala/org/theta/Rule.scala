@@ -5,11 +5,11 @@ package org.theta
  */
 case class Rule(override val relation:String,
                 parameters:Map[String, Atom],
-                statements:List[Statement] = Nil) extends Term {
+                statements:Iterable[Statement] = Nil) extends Term {
 
   override def arguments: Set[String] = parameters.keySet
 
-  def evaluate(binding: Binding, stack:List[Statement])(callback : => Unit): Unit = {
+  def evaluate(binding: Binding, stack:Iterable[Statement])(callback : => Unit): Unit = {
     stack match {
       case Nil =>
         callback
