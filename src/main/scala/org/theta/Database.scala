@@ -5,9 +5,8 @@ object Database {
   class DatabaseBuilder {
     var terms: List[Term] = Nil
 
-    def add(term: Term): this.type = {
+    def add(term: Term): Unit = {
       terms = term :: terms
-      this
     }
   }
 
@@ -28,9 +27,8 @@ object Database {
   class RuleBuilder {
     var statements: List[Statement] = Nil
 
-    def add(statement: Statement): this.type = {
+    def add(statement: Statement): Unit = {
       statements = statement :: statements
-      this
     }
   }
 
