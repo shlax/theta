@@ -3,17 +3,17 @@ package org.theta
 object Database {
 
   class DatabaseBuilder {
-    var terms: List[Clause] = Nil
+    var clauses: List[Clause] = Nil
 
     def add(term: Clause): Unit = {
-      terms = term :: terms
+      clauses = term :: clauses
     }
   }
 
   def apply(init: DatabaseBuilder ?=> Unit): Database = {
     given db : DatabaseBuilder = new DatabaseBuilder()
     init
-    Database(db.terms)
+    Database(db.clauses)
   }
 
   def add(term: Clause)(using tb: DatabaseBuilder): Unit = {
@@ -56,10 +56,10 @@ object Database {
 
 }
 
-class Database(val terms: Iterable[Clause]) extends Queryable{
+class Database(val clauses: Iterable[Clause]) extends Queryable{
 
   override def query(test: Clause => Boolean): Iterable[Clause] = {
-    terms.filter(test)
+    clauses.filter(test)
   }
 
 }
