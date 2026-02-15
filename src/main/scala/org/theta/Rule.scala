@@ -5,7 +5,7 @@ package org.theta
  */
 case class Rule(override val relation:String,
                 parameters:Map[String, Atom],
-                statements:Iterable[Statement] = Nil) extends Term {
+                statements:Iterable[Statement] = Nil) extends Clause {
 
   override def arguments: Set[String] = parameters.keySet
 
@@ -14,7 +14,7 @@ case class Rule(override val relation:String,
       case Nil =>
         callback
       case head :: tail =>
-        val context = head.arguments.map { (k, v) =>
+        val context = head.parameters.map { (k, v) =>
           v match {
             case Value(v) => k -> Variable(v)
             case Reference(nm) => k -> binding(nm)
@@ -43,7 +43,7 @@ case class Rule(override val relation:String,
             case _ => None
           }
         }
-        for( s <- statements; (k, v) <- s.arguments){
+        for( s <- statements; (k, v) <- s.parameters){
           v match {
             case Reference(nm) if !variables.contains(nm) =>
               variables = variables + (nm -> Variable())

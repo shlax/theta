@@ -4,7 +4,7 @@ package org.theta
  * capital(country:austria, city:vienna)
  */
 case class Fact(override val relation:String,
-                parameters:Map[String, Value]) extends Term{
+                parameters:Map[String, Value]) extends Clause{
   
   override def arguments: Set[String] = parameters.keySet
 

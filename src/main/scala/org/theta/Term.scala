@@ -7,5 +7,5 @@ trait Term {
   def arguments:Set[String]
 
   def evaluate(binding: Binding)(callback : => Unit): Unit
-  
+
 }

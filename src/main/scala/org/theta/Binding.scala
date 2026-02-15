@@ -35,7 +35,7 @@ class Binding(val state:Map[String, Variable], val database: Database) extends Q
 
   def apply(key:String): Variable = state(key)
 
-  override def query(test: Term => Boolean): Iterable[Term] = {
+  override def query(test: Clause => Boolean): Iterable[Clause] = {
     database.query(test)
   }
 
