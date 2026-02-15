@@ -19,7 +19,7 @@ class Rule(override val relation:String, val parameters:Map[String, Atom]) exten
             val context = head.arguments.map{ (k, v) =>
               v match {
                 case Value(v) => k -> Variable(v)
-                case Reference => k -> binding(k)
+                case Reference(nm) => k -> binding(nm)
               }
             }
             val statementBinding = Binding(context, binding)
@@ -44,12 +44,17 @@ class Rule(override val relation:String, val parameters:Map[String, Atom]) exten
       if( values.forall { (key, atom) => binding.merge(key, atom) } ){
         var variables = parameters.flatMap{ (k, v) =>
           v match {
-            case Reference => Some(k -> binding(k))
+            case Reference(nm) => Some(nm -> binding(k))
             case _ => None
           }
         }
-        for( s <- statements; (k, v) <- s.arguments if v == Reference && !variables.contains(k) ){
-          variables = variables + (k -> Variable())
+        for( s <- statements; (k, v) <- s.arguments){
+          v match {
+            case Reference(nm) if !variables.contains(nm) =>
+              variables = variables + (nm -> Variable())
+            case _ =>
+          }
+
         }
         val context = Binding(variables, binding)
         evaluate(context, statements)(callback)
