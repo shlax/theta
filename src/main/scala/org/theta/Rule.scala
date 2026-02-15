@@ -20,7 +20,7 @@ case class Rule(override val relation:String,
             case Reference(nm) => k -> binding(nm)
           }
         }
-        head.evaluate(Binding(context, binding)){
+        head.evaluate( Binding(context, binding) ){
           evaluate(binding, tail)(callback)
         }
     }
@@ -51,8 +51,7 @@ case class Rule(override val relation:String,
           }
 
         }
-        val context = Binding(variables, binding)
-        evaluate(context, statements)(callback)
+        evaluate( Binding(variables, binding), statements )(callback)
       }
     }
   }
