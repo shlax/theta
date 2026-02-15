@@ -2,6 +2,6 @@ package org.theta
 
 trait Queryable {
 
-  def query(test: Term => Boolean): Seq[Term]
+  def query(test: Term => Boolean): Iterable[Term]
 
 }

@@ -1,23 +1,20 @@
 package org.theta
 
-import scala.annotation.targetName
-
 object Database {
 
-  @targetName("from")
   def apply(t: Term *): Database = {
-    new Database(t.toList)
+    new Database(t)
   }
 
-  def apply(l: Seq[Term]): Database = {
+  def apply(l: Iterable[Term]): Database = {
     new Database(l)
   }
 
 }
 
-class Database(val terms: Seq[Term]) extends Queryable{
+class Database(val terms: Iterable[Term]) extends Queryable{
 
-  override def query(test: Term => Boolean): Seq[Term] = {
+  override def query(test: Term => Boolean): Iterable[Term] = {
     terms.filter(test)
   }
 
