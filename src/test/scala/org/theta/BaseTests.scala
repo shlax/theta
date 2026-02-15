@@ -28,6 +28,7 @@ class BaseTests {
       res = true
     }
 
+    Assertions.assertTrue(name.value.isEmpty)
     Assertions.assertTrue(res)
   }
 
@@ -46,6 +47,8 @@ class BaseTests {
       res = true
     }
 
+    Assertions.assertTrue(country.value.isEmpty)
+    Assertions.assertTrue(city.value.isEmpty)
     Assertions.assertTrue(res)
   }
 
@@ -58,9 +61,10 @@ class BaseTests {
 
     val ruleFail = Fact("capital", Map("country" -> Value("italy"), "city" -> Value("rome")))
     ruleFail.evaluate(binding){
-      Assertions.assertEquals("austria", country.resolve)
       res = true
     }
+
+    Assertions.assertTrue(country.value.isEmpty)
     Assertions.assertFalse(res)
 
     val ruleOk = Fact("capital", Map("country" -> Value("austria"), "city" -> Value("vienna")))
@@ -68,6 +72,8 @@ class BaseTests {
       Assertions.assertEquals("austria", country.resolve)
       res = true
     }
+
+    Assertions.assertTrue(country.value.isEmpty)
     Assertions.assertTrue(res)
 
   }
