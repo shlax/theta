@@ -5,7 +5,7 @@ package org.theta
  */
 case class Rule(override val relation:String,
                 parameters:Map[String, Atom],
-                statements:List[Statement]) extends Term {
+                statements:List[Statement] = Nil) extends Term {
 
   override def arguments: Set[String] = parameters.keySet
 
