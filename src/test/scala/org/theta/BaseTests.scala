@@ -9,12 +9,15 @@ class BaseTests {
     val canFly = Fact("can-fly", Map("y" -> Value("turaco")))
     val animal = Fact("animal", Map("z" -> Value("turaco")))
 
+    val plane = Fact("can-fly", Map("y" -> Value("plane")))
+    val dog = Fact("animal", Map("z" -> Value("dog")))
+
     val bird = Rule("bird", Map("x" -> Reference("X")), List(
       Statement("can-fly", Map("y" -> Reference("X"))),
       Statement("animal", Map("z" -> Reference("X")))
     ))
 
-    val db = Database(canFly, animal, bird)
+    val db = Database(plane, dog, canFly, animal, bird)
 
     val name = Variable()
     val binding = Binding(Map("x" -> name), db)
