@@ -34,7 +34,7 @@ object Database {
     tb << Rule(relation, parameters, rb.statements)
   }
 
-  def statements(relation:String, arguments:Map[String, Atom])(using tb: RuleBuilder): Unit = {
+  def statement(relation:String, arguments:Map[String, Atom])(using tb: RuleBuilder): Unit = {
     tb << Statement(relation, arguments)
   }
 
