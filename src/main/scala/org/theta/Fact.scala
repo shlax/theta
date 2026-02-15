@@ -3,7 +3,8 @@ package org.theta
 /**
  * capital(country:austria, city:vienna)
  */
-case class Fact(override val relation:String, parameters:Map[String, Value]) extends Term{
+case class Fact(override val relation:String,
+                parameters:Map[String, Value]) extends Term{
   
   override def arguments: Set[String] = parameters.keySet
 

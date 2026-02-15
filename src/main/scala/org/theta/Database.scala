@@ -1,10 +1,10 @@
 package org.theta
 
-class Database extends Queryable{
+class Database(t:Term *) extends Queryable{
 
-  var terms: List[Term] = Nil
+  var terms: List[Term] = t.toList
 
-  def add(rule: Term): this.type = {
+  def += (rule: Term): this.type = {
     terms = rule :: terms
     this
   }

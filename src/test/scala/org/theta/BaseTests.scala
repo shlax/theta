@@ -6,6 +6,30 @@ class BaseTests {
 
   @Test
   def ruleTest01(): Unit = {
+    val canFly = Fact("can-fly", Map("y" -> Value("turaco")))
+    val animal = Fact("animal", Map("z" -> Value("turaco")))
+
+    val bird = Rule("bird", Map("x" -> Reference("X")), List(
+      Statement("can-fly", Map("y" -> Reference("X"))),
+      Statement("animal", Map("z" -> Reference("X")))
+    ))
+
+    val db = Database(canFly, animal, bird)
+
+    val name = Variable()
+    val binding = Binding(Map("x" -> name), db)
+
+    var res = false
+    bird.evaluate(binding){
+      Assertions.assertEquals("turaco", name.resolve)
+      res = true
+    }
+
+    Assertions.assertTrue(res)
+  }
+
+  @Test
+  def factTest01(): Unit = {
     val country = Variable()
     val city = Variable()
     val binding = Binding(Map("country" -> country, "city" -> city), Database())
@@ -23,7 +47,7 @@ class BaseTests {
   }
 
   @Test
-  def ruleTest02(): Unit = {
+  def factTest02(): Unit = {
     val country = Variable()
 
     var res = false

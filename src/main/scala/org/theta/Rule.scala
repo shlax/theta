@@ -3,11 +3,11 @@ package org.theta
 /**
  * bird(x) => can-fly(x) & animal(x)
  */
-class Rule(override val relation:String, val parameters:Map[String, Atom]) extends Term {
+class Rule(override val relation:String,
+           val parameters:Map[String, Atom],
+           val statements:List[Statement]) extends Term {
 
   override def arguments: Set[String] = parameters.keySet
-
-  val statements:List[Statement] = Nil
 
   def evaluate(binding: Binding, stack:List[Statement])(callback : => Unit): Unit = {
     stack match {
