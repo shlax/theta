@@ -7,9 +7,8 @@ case class Rule(override val relation:String,
                 parameters:Map[String, Atom],
                 statements:Iterable[Statement] = Nil) extends Clause {
 
-  parameters.values.flatMap{
-      case Reference(nm) => Some(nm)
-      case _ => None
+  parameters.values.collect{
+      case Reference(nm) => nm
   }.groupBy(identity).filter(_._2.size > 1).foreach{ (nm, _) =>
     throw new IllegalArgumentException(s"Duplicate variable name: $nm")
   }
