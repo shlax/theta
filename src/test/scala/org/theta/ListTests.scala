@@ -8,7 +8,7 @@ import org.theta.dsl.builder.*
 class ListTests {
 
   @Test
-  def test01(): Unit = {
+  def list01(): Unit = {
     val db = database{
       add(ListClause(), EqualClause())
 
@@ -55,7 +55,7 @@ class ListTests {
   }
 
   @Test
-  def test02(): Unit = {
+  def list02(): Unit = {
     val db = database{
       add(ListClause(), SetClause())
 
