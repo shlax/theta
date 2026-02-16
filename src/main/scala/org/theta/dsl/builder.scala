@@ -20,10 +20,6 @@ object builder {
     b.add(Fact(relation, parameters.map( (k, v) => k -> Value(v) ).toMap))
   }
 
-  def fact(relation:String, parameters:Map[String, Value])(using b: DatabaseBuilder): Unit = {
-    b.add(Fact(relation, parameters))
-  }
-
   @targetName("ruleOperator")
   def rule(relation:String, parameters:(String, String)*)(init: RuleBuilder ?=> Unit)(using b: DatabaseBuilder): Unit = {
     given rb: RuleBuilder = new RuleBuilder(relation, parameters.map( (x, y) => x -> Reference(y) ).toMap)
@@ -33,12 +29,6 @@ object builder {
 
   def rule(relation:String, parameters:(String, Atom)*)(init: RuleBuilder ?=> Unit)(using b: DatabaseBuilder): Unit = {
     given rb: RuleBuilder = new RuleBuilder(relation, parameters.toMap)
-    init
-    b.add(rb.build())
-  }
-
-  def rule(relation:String, parameters:Map[String, Atom])(init: RuleBuilder ?=> Unit)(using b: DatabaseBuilder): Unit = {
-    given rb : RuleBuilder = new RuleBuilder(relation, parameters)
     init
     b.add(rb.build())
   }
@@ -54,10 +44,6 @@ object builder {
 
   def statement(relation: String, arguments: (String, Atom)*)(using b: RuleBuilder): Unit = {
     b.add(Statement(relation, arguments.toMap))
-  }
-
-  def statement(relation:String, arguments:Map[String, Atom])(using b: RuleBuilder): Unit = {
-    b.add(Statement(relation, arguments))
   }
 
 }
