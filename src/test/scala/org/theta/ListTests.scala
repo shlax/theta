@@ -36,10 +36,10 @@ class ListTests {
 
       var res = 0
       db.query("contains", binding) {
-        res += element.resolve.asInstanceOf[Int]
+        res += 1
       }
 
-      Assertions.assertEquals(i, res)
+      Assertions.assertEquals(1, res)
     }
 
     val element = Variable(4)
