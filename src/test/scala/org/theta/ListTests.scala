@@ -3,7 +3,7 @@ package org.theta
 import org.junit.jupiter.api.{Assertions, Test}
 import org.theta.core.{EqualClause, ListClause, SetClause}
 import org.theta.solver.{Binding, Variable}
-import org.theta.solver.Database.*
+import org.theta.dsl.builder.*
 
 class ListTests {
 
