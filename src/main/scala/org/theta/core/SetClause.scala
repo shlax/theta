@@ -2,7 +2,7 @@ package org.theta.core
 
 import org.theta.solver.{Binding, Value}
 
-class SetOperator extends Operator("=", "x", "y"){
+class SetClause extends Operator("=", "x", "y"){
 
   override def evaluate(binding: Binding)(callback: => Unit): Unit = {
     val x = binding("x")

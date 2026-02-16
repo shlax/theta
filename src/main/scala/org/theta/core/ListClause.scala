@@ -2,7 +2,7 @@ package org.theta.core
 
 import org.theta.solver.{Binding, Value}
 
-class ListOperator extends Operator("[|]", "list", "head", "tail"){
+class ListClause extends Operator("[|]", "list", "head", "tail"){
 
   override def evaluate(binding: Binding)(callback: => Unit): Unit = {
     val list = binding("list"); val head = binding("head"); val tail = binding("tail")

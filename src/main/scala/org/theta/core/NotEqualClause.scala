@@ -2,7 +2,7 @@ package org.theta.core
 
 import org.theta.solver.Binding
 
-class NotEqualOperator extends Operator("!=", "x", "y"){
+class NotEqualClause extends Operator("!=", "x", "y"){
 
   override def evaluate(binding: Binding)(callback: => Unit): Unit = {
     val x = binding("x"); val y = binding("y")
