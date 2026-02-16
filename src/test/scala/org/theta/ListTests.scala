@@ -2,7 +2,7 @@ package org.theta
 
 import org.junit.jupiter.api.{Assertions, Test}
 import org.theta.core.{EqualClause, ListClause, SetClause}
-import org.theta.solver.{Binding, Variable}
+import org.theta.solver.{Binding, Reference, Value, Variable}
 import org.theta.dsl.builder.*
 
 class ListTests {
@@ -88,6 +88,42 @@ class ListTests {
 
     Assertions.assertEquals(numbers.size, res.size)
     Assertions.assertEquals(numbers.toSet, res.toSet)
+
+  }
+
+  @Test
+  def list03(): Unit = {
+    val db = database {
+      add(ListClause(), SetClause())
+
+      rule("append", "from" -> Value(Nil), "to" -> Reference("b"), "result" -> Reference("r")) {
+        statement("=", "x" -> "b", "y" -> "r" )
+      }
+
+      rule("append", "from" -> "a", "to" -> "b", "result" -> "r") {
+        statement("[|]", "list" -> "a", "head" -> "h", "tail" -> "t")
+        statement("[|]", "list" -> "c", "head" -> "h", "tail" -> "b")
+        statement("append", "from" -> "t", "to" -> "c", "result" -> "r")
+      }
+
+    }
+
+    val from = Variable( List(3, 2, 1) )
+    val to = Variable( List(4) )
+    val result = Variable()
+
+    val element = Variable()
+    val binding = Binding(Map("from" -> from, "to" -> to, "result" -> result), db)
+
+    var cnt = 0
+    var res: List[Int] = Nil
+    db.query("append", binding) {
+      res = result.resolve.asInstanceOf[List[Int]]
+      cnt += 1
+    }
+
+    Assertions.assertEquals(1, cnt)
+    Assertions.assertEquals(List(1, 2, 3, 4), res)
 
   }
 
