@@ -16,8 +16,8 @@ object builder {
     for(t <- term) b.add(t)
   }
 
-  def fact(relation:String, parameters:(String, Value)*)(using b: DatabaseBuilder): Unit = {
-    b.add(Fact(relation, parameters.toMap))
+  def fact(relation:String, parameters:(String, Any)*)(using b: DatabaseBuilder): Unit = {
+    b.add(Fact(relation, parameters.map( (k, v) => k -> Value(v) ).toMap))
   }
 
   def fact(relation:String, parameters:Map[String, Value])(using b: DatabaseBuilder): Unit = {
