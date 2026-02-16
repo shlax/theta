@@ -1,9 +1,16 @@
 package org.theta.core
 
-class NotEqual extends Equal{
+import org.theta.solver.Binding
 
-  override def isEqual(x: Any, y: Any): Boolean = {
-    x != y
+class NotEqual extends Operator("!=", "x", "y"){
+
+  override def evaluate(binding: Binding)(callback: => Unit): Unit = {
+    val x = binding("x"); val y = binding("y")
+    if(x.value.isDefined && y.value.isDefined){
+      if(x.value.get != y.value.get){
+        callback
+      }
+    }
   }
 
 }
