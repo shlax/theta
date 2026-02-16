@@ -1,4 +1,4 @@
-package org.theta
+package org.theta.solver
 
 object Binding {
 

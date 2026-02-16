@@ -1,4 +1,4 @@
-package org.theta
+package org.theta.solver
 
 /**
  * bird(x) => can-fly(x) & animal(x)

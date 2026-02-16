@@ -1,6 +1,7 @@
 package org.theta
 
 import org.junit.jupiter.api.{Assertions, Test}
+import org.theta.solver.{Binding, Database, Fact, Reference, Rule, Statement, Value, Variable}
 
 class BaseTests {
 

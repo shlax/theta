@@ -1,4 +1,4 @@
-package org.theta
+package org.theta.solver
 
 case class Statement(override val relation:String,
                      parameters:Map[String, Atom]) extends Term{

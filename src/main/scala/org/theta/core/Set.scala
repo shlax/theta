@@ -1,6 +1,6 @@
 package org.theta.core
 
-import org.theta.Binding
+import org.theta.solver.Binding
 
 class Set extends Operator("=", "x", "y"){
 
