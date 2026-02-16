@@ -33,29 +33,21 @@ case class Rule(override val relation:String,
   }
 
   override def evaluate(binding: Binding)(callback : => Unit): Unit = {
-    val values = parameters.flatMap { (k, v) =>
-      v match {
-        case x : Value => Some(k -> x)
-        case _ => None
-      }
+    val values = parameters.collect {
+      case (k, x : Value) => k -> x
     }
 
     binding.push {
       // check if signature matches binding
       if( values.forall { (key, atom) => binding.merge(key, atom) } ){
-        var variables = parameters.flatMap{ (k, v) =>
-          v match {
-            case Reference(nm) => Some(nm -> binding(k))
-            case _ => None
-          }
+        var variables = parameters.collect{
+          case (k, Reference(nm) ) => nm -> binding(k)
         }
-        for( s <- statements; (k, v) <- s.parameters){
-          v match {
-            case Reference(nm) if !variables.contains(nm) =>
-              variables = variables + (nm -> Variable())
-            case _ =>
+        for( s <- statements; (k, v) <- s.parameters if v.isInstanceOf[Reference]){
+          val nm = v.asInstanceOf[Reference].name
+          if (!variables.contains(nm)) {
+            variables = variables + (nm -> Variable())
           }
-
         }
         evaluate( Binding(variables, binding), statements )(callback)
       }
