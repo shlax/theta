@@ -24,4 +24,8 @@ class Variable(v:Option[Any] = None){
 
   def resolve: Any = value.get
 
+  def isEmpty:Boolean = value.isEmpty
+
+  def isDefined:Boolean = value.isDefined
+
 }

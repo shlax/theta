@@ -27,10 +27,7 @@ class Binding(val state:Map[String, Variable], val database: Database) extends Q
   }
 
   def merge(key:String, value: Value): Boolean = {
-    state.get(key) match {
-      case Some(v) => v.set(value)
-      case None => false
-    }
+    state(key).set(value)
   }
 
   def apply(key:String): Variable = state(key)

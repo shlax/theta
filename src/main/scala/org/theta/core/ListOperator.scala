@@ -1,0 +1,50 @@
+package org.theta.core
+
+import org.theta.solver.{Binding, Value}
+
+class ListOperator extends Operator("[|]", "list", "head", "tail"){
+
+  override def evaluate(binding: Binding)(callback: => Unit): Unit = {
+    val list = binding("list"); val head = binding("head"); val tail = binding("tail")
+    if(list.isDefined && head.isDefined && tail.isDefined){
+      list.resolve match {
+        case l:List[?] =>
+          tail.resolve match {
+            case t:List[?] =>
+              if(l == head.resolve :: t){
+                callback
+              }
+            case _ =>
+          }
+        case _ =>
+      }
+    }else if(list.isEmpty && head.isDefined && tail.isDefined){
+      tail.resolve match {
+        case t: List[?] =>
+          val l = head.resolve :: t
+          binding.push{
+            if(binding.merge("list", Value(l))) {
+              callback
+            }
+          }
+        case _ =>
+      }
+    } else if (list.isDefined) {
+      list.resolve match {
+        case l: List[?] =>
+          l match {
+            case h :: t =>
+              binding.push{
+                if( binding.merge("head", Value(h)) && binding.merge("tail", Value(t)) ){
+                  callback
+                }
+              }
+            case _ =>
+          }
+        case _ =>
+      }
+    }
+
+  }
+
+}
