@@ -1,35 +1,55 @@
 package org.theta.solver
 
+import scala.annotation.targetName
+import scala.collection.mutable.ArrayBuffer
+
 object Database {
 
   class DatabaseBuilder {
-    var clauses: List[Clause] = Nil
+    var buffer: ArrayBuffer[Clause] = new ArrayBuffer()
+
+    def clauses: List[Clause] = buffer.toList
 
     def add(term: Clause): Unit = {
-      clauses = term :: clauses
+      buffer += term
     }
   }
 
-  def apply(init: DatabaseBuilder ?=> Unit): Database = {
+  def database(init: DatabaseBuilder ?=> Unit): Database = {
     given db : DatabaseBuilder = new DatabaseBuilder()
     init
     Database(db.clauses)
   }
 
-  def add(term: Clause)(using tb: DatabaseBuilder): Unit = {
-    tb.add(term)
+  def add(term: Clause*)(using b: DatabaseBuilder): Unit = {
+    for(t <- term) b.add(t)
   }
 
-  def fact(relation:String, parameters:Map[String, Value])(using tb: DatabaseBuilder): Unit = {
-    tb.add(Fact(relation, parameters))
+  def fact(relation:String, parameters:Map[String, Value])(using b: DatabaseBuilder): Unit = {
+    b.add(Fact(relation, parameters))
   }
 
   class RuleBuilder {
-    var statements: List[Statement] = Nil
+    var buffer: ArrayBuffer[Statement] = ArrayBuffer()
+
+    def statements: List[Statement] = buffer.toList
 
     def add(statement: Statement): Unit = {
-      statements = statement :: statements
+      buffer += statement
     }
+  }
+
+  @targetName("ruleOperator")
+  def rule(relation:String, parameters:(String, String)*)(init: RuleBuilder ?=> Unit)(using tb: DatabaseBuilder): Unit = {
+    given rb: RuleBuilder = new RuleBuilder()
+    init
+    tb.add(Rule(relation, parameters.map( (x, y) => x -> Reference(y) ).toMap, rb.statements))
+  }
+
+  def rule(relation:String, parameters:(String, Atom)*)(init: RuleBuilder ?=> Unit)(using tb: DatabaseBuilder): Unit = {
+    given rb: RuleBuilder = new RuleBuilder()
+    init
+    tb.add(Rule(relation, parameters.toMap, rb.statements))
   }
 
   def rule(relation:String, parameters:Map[String, Atom])(init: RuleBuilder ?=> Unit)(using tb: DatabaseBuilder): Unit = {
@@ -38,12 +58,21 @@ object Database {
     tb.add(Rule(relation, parameters, rb.statements))
   }
 
-  def add(statement: Statement)(using tb: RuleBuilder): Unit = {
-    tb.add(statement)
+  def add(statement: Statement)(using b: RuleBuilder): Unit = {
+    b.add(statement)
   }
 
-  def statement(relation:String, arguments:Map[String, Atom])(using tb: RuleBuilder): Unit = {
-    tb.add(Statement(relation, arguments))
+  @targetName("statementOperator")
+  def statement(relation: String, arguments: (String, String)*)(using b: RuleBuilder): Unit = {
+    b.add(Statement(relation, arguments.map( (x, y) => x -> Reference(y) ).toMap))
+  }
+
+  def statement(relation: String, arguments: (String, Atom)*)(using b: RuleBuilder): Unit = {
+    b.add(Statement(relation, arguments.toMap))
+  }
+
+  def statement(relation:String, arguments:Map[String, Atom])(using b: RuleBuilder): Unit = {
+    b.add(Statement(relation, arguments))
   }
 
   def apply(t: Clause *): Database = {
@@ -60,6 +89,15 @@ class Database(val clauses: Iterable[Clause]) extends Queryable{
 
   override def query(test: Clause => Boolean): Iterable[Clause] = {
     clauses.filter(test)
+  }
+
+  def query(relation:String, binding: Binding)(callback : => Unit):Unit = {
+    val arguments = binding.state.keys
+    for(candidate <- query(c => c.relation == relation && c.arguments == arguments)){
+      binding.push {
+        candidate.evaluate(binding)(callback)
+      }
+    }
   }
 
 }
