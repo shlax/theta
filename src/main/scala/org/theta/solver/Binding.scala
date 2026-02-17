@@ -14,16 +14,18 @@ object Binding {
 
 class Binding(val state:Map[String, Variable], val database: Database) extends Queryable {
 
-  def push(block : => Unit): Unit = {
+  def push[T](block : => T): T = {
     val values = state.map { (key, value) =>
       (key, value.value)
     }
 
-    block
+    val res = block
 
     for((key, value) <- values){
       state(key).value = value
     }
+    
+    res
   }
 
   def merge(key:String, value: Value): Boolean = {

@@ -9,7 +9,7 @@ case class Statement(override val relation:String,
     t.relation == relation && t.arguments == arguments
   }
 
-  override def evaluate(binding: Binding)(callback : => Unit): Unit = {
+  override def evaluate(binding: Binding)(callback : => Boolean): Boolean = {
     val context = parameters.map { (k, v) =>
       v match {
         case Value(x) => k -> Variable(x)
@@ -18,10 +18,11 @@ case class Statement(override val relation:String,
     }
     val statementBinding = Binding(context, binding)
 
-    for(candidate <- binding.query(matches)){
-      candidate.evaluate(statementBinding)(callback)
+    var continue = true
+    for(candidate <- binding.query(matches) if continue){
+      continue = candidate.evaluate(statementBinding)(callback)
     }
-
+    continue
   }
 
 }

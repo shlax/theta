@@ -4,7 +4,7 @@ import org.theta.solver.{Binding, Value}
 
 class ListClause extends Operator("[|]", "list", "head", "tail"){
 
-  override def evaluate(binding: Binding)(callback: => Unit): Unit = {
+  override def evaluate(binding: Binding)(callback: => Boolean): Boolean = {
     val list = binding("list"); val head = binding("head"); val tail = binding("tail")
     if(list.isDefined && head.isDefined && tail.isDefined){
       list.resolve match {
@@ -13,10 +13,10 @@ class ListClause extends Operator("[|]", "list", "head", "tail"){
             case t:List[?] =>
               if(l == head.resolve :: t){
                 callback
-              }
-            case _ =>
+              }else true
+            case _ => true
           }
-        case _ =>
+        case _ => true
       }
     }else if(list.isEmpty && head.isDefined && tail.isDefined){
       tail.resolve match {
@@ -25,9 +25,9 @@ class ListClause extends Operator("[|]", "list", "head", "tail"){
           binding.push{
             if(binding.merge("list", Value(l))) {
               callback
-            }
+            }else true
           }
-        case _ =>
+        case _ => true
       }
     } else if (list.isDefined) {
       list.resolve match {
@@ -37,13 +37,13 @@ class ListClause extends Operator("[|]", "list", "head", "tail"){
               binding.push{
                 if( binding.merge("head", Value(h)) && binding.merge("tail", Value(t)) ){
                   callback
-                }
+                }else true
               }
-            case _ =>
+            case _ => true
           }
-        case _ =>
+        case _ => true
       }
-    }
+    }else true
 
   }
 

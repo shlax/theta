@@ -18,11 +18,14 @@ class Database(val clauses: Iterable[Clause]) extends Queryable{
     clauses.filter(test)
   }
 
-  def query(relation:String, binding: Binding)(callback : => Unit):Unit = {
+  def query(relation:String, binding: Binding)(callback : => Boolean):Boolean = {
     val arguments = binding.state.keys
-    for(candidate <- query(c => c.relation == relation && c.arguments == arguments)){
-      candidate.evaluate(binding)(callback)
+
+    var continue = true
+    for(candidate <- query(c => c.relation == relation && c.arguments == arguments) if continue){
+      continue = candidate.evaluate(binding)(callback)
     }
+    continue
   }
 
 }

@@ -6,6 +6,7 @@ trait Term {
 
   def arguments:Set[String]
 
-  def evaluate(binding: Binding)(callback : => Unit): Unit
+  /** return true if execution should continue */
+  def evaluate(binding: Binding)(callback : => Boolean): Boolean
 
 }

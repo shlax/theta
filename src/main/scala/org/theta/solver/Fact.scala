@@ -9,11 +9,11 @@ case class Fact(override val relation:String,
   override def arguments: Set[String] = parameters.keySet
 
   /** check if signature matches binding */
-  def evaluate(binding: Binding)(callback : => Unit): Unit = {
+  def evaluate(binding: Binding)(callback : => Boolean): Boolean = {
     binding.push {
       if (parameters.forall { (key, atom) => binding.merge(key, atom) } ) {
         callback
-      }
+      }else true
     }
   }
 

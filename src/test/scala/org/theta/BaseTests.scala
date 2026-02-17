@@ -22,6 +22,7 @@ class BaseTests {
     bird.evaluate(binding) {
       Assertions.assertEquals("turaco", name.resolve)
       res = true
+      true
     }
 
     Assertions.assertTrue(name.value.isEmpty)
@@ -50,6 +51,7 @@ class BaseTests {
     bird.evaluate(binding){
       Assertions.assertEquals("turaco", name.resolve)
       res = true
+      true
     }
 
     Assertions.assertTrue(name.value.isEmpty)
@@ -69,6 +71,7 @@ class BaseTests {
       Assertions.assertEquals("austria", country.resolve)
       Assertions.assertEquals("vienna", city.resolve)
       res = true
+      true
     }
 
     Assertions.assertTrue(country.value.isEmpty)
@@ -86,6 +89,7 @@ class BaseTests {
     val ruleFail = Fact("capital", Map("country" -> Value("italy"), "city" -> Value("rome")))
     ruleFail.evaluate(binding){
       res = true
+      true
     }
 
     Assertions.assertTrue(country.value.isEmpty)
@@ -95,6 +99,7 @@ class BaseTests {
     ruleOk.evaluate(binding){
       Assertions.assertEquals("austria", country.resolve)
       res = true
+      true
     }
 
     Assertions.assertTrue(country.value.isEmpty)

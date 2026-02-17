@@ -37,6 +37,7 @@ class ListTests {
       var res = 0
       db.query("contains", binding) {
         res += 1
+        true
       }
 
       Assertions.assertEquals(1, res)
@@ -48,6 +49,7 @@ class ListTests {
     var res = 0
     db.query("contains", binding) {
       res += 1
+      true
     }
 
     Assertions.assertEquals(0, res)
@@ -84,6 +86,7 @@ class ListTests {
     db.query("iterate", binding) {
       val i = element.resolve.asInstanceOf[Int]
       res = i :: res
+      true
     }
 
     Assertions.assertEquals(numbers.size, res.size)
@@ -120,6 +123,7 @@ class ListTests {
     db.query("append", binding) {
       res = result.resolve.asInstanceOf[List[Int]]
       cnt += 1
+      true
     }
 
     Assertions.assertEquals(1, cnt)
@@ -160,6 +164,7 @@ class ListTests {
       val r = result.resolve.asInstanceOf[List[?]]
       Assertions.assertEquals(List(1, 2, 3), r)
       res += 1
+      true
     }
 
     Assertions.assertEquals(1, res)

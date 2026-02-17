@@ -15,7 +15,7 @@ case class Rule(override val relation:String,
 
   override def arguments: Set[String] = parameters.keySet
 
-  def evaluate(binding: Binding, stack:Iterable[Statement])(callback : => Unit): Unit = {
+  def evaluate(binding: Binding, stack:Iterable[Statement])(callback : => Boolean): Boolean = {
     stack match {
       case Nil =>
         callback
@@ -26,7 +26,7 @@ case class Rule(override val relation:String,
     }
   }
 
-  override def evaluate(binding: Binding)(callback : => Unit): Unit = {
+  override def evaluate(binding: Binding)(callback : => Boolean): Boolean = {
     val values = parameters.collect {
       case (k, x : Value) => k -> x
     }
@@ -44,7 +44,8 @@ case class Rule(override val relation:String,
           }
         }
         evaluate( Binding(variables, binding), statements )(callback)
-      }
+      }else true
+      
     }
   }
 
