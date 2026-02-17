@@ -127,4 +127,42 @@ class ListTests {
 
   }
 
+  @Test
+  def list04(): Unit = {
+
+    val db = database {
+      add(ListClause(), SetClause())
+
+      rule("reverse", "from" -> Value(Nil), "to" -> Reference("b"), "result" -> Reference("r")) {
+        statement("=", "x" -> "b", "y" -> "r")
+      }
+
+      rule("reverse", "from" -> "a", "result" -> "r") {
+        statement("reverse", "from" -> Reference("a"), "to" -> Value(Nil), "result" -> Reference("r") )
+      }
+
+      rule("reverse", "from" -> "a", "to" -> "b", "result" -> "r") {
+        statement("[|]", "list" -> "a", "head" -> "h", "tail" -> "t")
+        statement("[|]", "list" -> "c", "head" -> "h", "tail" -> "b")
+        statement("reverse", "from" -> "t", "to" -> "c", "result" -> "r")
+      }
+
+    }
+
+    val from = Variable(List(3, 2, 1))
+    val result = Variable()
+
+    val element = Variable()
+    val binding = Binding(Map("from" -> from, "result" -> result), db)
+
+    var res = 0
+    db.query("reverse", binding) {
+      val r = result.resolve.asInstanceOf[List[?]]
+      Assertions.assertEquals(List(1, 2, 3), r)
+      res += 1
+    }
+
+    Assertions.assertEquals(1, res)
+
+  }
 }
