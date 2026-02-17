@@ -20,13 +20,7 @@ case class Rule(override val relation:String,
       case Nil =>
         callback
       case head :: tail =>
-        val context = head.parameters.map { (k, v) =>
-          v match {
-            case Value(v) => k -> Variable(v)
-            case Reference(nm) => k -> binding(nm)
-          }
-        }
-        head.evaluate( Binding(context, binding) ){
+        head.evaluate( binding ){
           evaluate(binding, tail)(callback)
         }
     }

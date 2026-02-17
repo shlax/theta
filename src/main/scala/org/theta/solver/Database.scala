@@ -21,9 +21,7 @@ class Database(val clauses: Iterable[Clause]) extends Queryable{
   def query(relation:String, binding: Binding)(callback : => Unit):Unit = {
     val arguments = binding.state.keys
     for(candidate <- query(c => c.relation == relation && c.arguments == arguments)){
-      binding.push {
-        candidate.evaluate(binding)(callback)
-      }
+      candidate.evaluate(binding)(callback)
     }
   }
 
