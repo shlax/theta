@@ -19,12 +19,12 @@ class Binding(val state:Map[String, Variable], val database: Database) extends Q
       (key, value.value)
     }
 
-    val res = block
+    val res:T = block
 
     for((key, value) <- values){
       state(key).value = value
     }
-    
+
     res
   }
 
