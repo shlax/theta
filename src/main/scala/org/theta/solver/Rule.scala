@@ -37,15 +37,14 @@ case class Rule(override val relation:String,
         var variables = parameters.collect{
           case (k, Reference(nm) ) => nm -> binding(k)
         }
-        for( s <- statements; (k, v) <- s.parameters if v.isInstanceOf[Reference]){
-          val nm = v.asInstanceOf[Reference].name
+        for( s <- statements; nm <- s.variables){
           if (!variables.contains(nm)) {
             variables = variables + (nm -> Variable())
           }
         }
         evaluate( Binding(variables, binding), statements )(callback)
       }else true
-      
+
     }
   }
 

@@ -5,6 +5,12 @@ case class Statement(override val relation:String,
 
   override def arguments: Set[String] = parameters.keySet
 
+  def variables: Set[String] = {
+    parameters.values.collect{
+      case Reference(nm) => nm
+    }.toSet
+  }
+
   def matches(t:Term):Boolean = {
     t.relation == relation && t.arguments == arguments
   }
