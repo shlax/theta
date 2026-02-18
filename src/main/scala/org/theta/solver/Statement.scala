@@ -1,15 +1,15 @@
 package org.theta.solver
 
-case class Statement(override val relation:String,
+case class Statement(relation:String,
                      parameters:Map[String, Atom]) extends Term{
 
-  override def arguments: Set[String] = parameters.keySet
+  def arguments: Set[String] = parameters.keySet
 
   def variables: Set[String] = parameters.values.collect{
     case Reference(nm) => nm
   }.toSet
 
-  def matches(t:Term):Boolean = {
+  def matches(t:Clause):Boolean = {
     t.relation == relation && t.arguments == arguments
   }
 
