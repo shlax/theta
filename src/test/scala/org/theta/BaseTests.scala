@@ -1,7 +1,7 @@
 package org.theta
 
 import org.junit.jupiter.api.{Assertions, Test}
-import org.theta.solver.{Binding, Database, Fact, Reference, Rule, Statement, Value, Variable}
+import org.theta.solver.{Binding, Database, Fact, Reference, Rule, RuleStatement, Value, Variable}
 
 class BaseTests {
 
@@ -10,7 +10,7 @@ class BaseTests {
     val canFly = Fact("can-fly", Map("y" -> Value("turaco")))
 
     val bird = Rule("bird", Map("x" -> Reference("X")), List(
-      Statement("can-fly", Map("y" -> Reference("X")))
+      RuleStatement("can-fly", Map("y" -> Reference("X")))
     ))
 
     val db = Database(canFly, bird)
@@ -38,8 +38,8 @@ class BaseTests {
     val dog = Fact("animal", Map("z" -> Value("dog")))
 
     val bird = Rule("bird", Map("x" -> Reference("X")), List(
-      Statement("can-fly", Map("y" -> Reference("X"))),
-      Statement("animal", Map("z" -> Reference("X")))
+      RuleStatement("can-fly", Map("y" -> Reference("X"))),
+      RuleStatement("animal", Map("z" -> Reference("X")))
     ))
 
     val db = Database(plane, dog, canFly, animal, bird)

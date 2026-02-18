@@ -1,15 +1,15 @@
 package org.theta.dsl
 
-import org.theta.core.{NotTerm, ForEachTerm}
-import org.theta.solver.{Atom, Clause, Database, Fact, Reference, Statement, Term, Value}
+import org.theta.core.NotStatement
+import org.theta.solver.{Atom, Clause, Database, Fact, Reference, RuleStatement, Statement, Term, Value}
 
 import scala.annotation.targetName
 
 object builder {
 
-  def not(term: Term): NotTerm = NotTerm(term)
+  def not(term: Statement): NotStatement = NotStatement(term)
 
-  def forEach(terms: Term*): ForEachTerm = ForEachTerm(terms)
+  //def forEach(terms: Term*): ForEachTerm = ForEachTerm(terms)
 
   def database(init: DatabaseBuilder ?=> Unit): Database = {
     given db : DatabaseBuilder = new DatabaseBuilder()
@@ -17,8 +17,8 @@ object builder {
     db.build()
   }
 
-  def add(term: Clause*)(using b: DatabaseBuilder): Unit = {
-    for(t <- term) b.add(t)
+  def add(clauses: Clause*)(using b: DatabaseBuilder): Unit = {
+    for(c <- clauses) b.add(c)
   }
 
   def fact(relation:String, parameters:(String, Any)*)(using b: DatabaseBuilder): Unit = {
@@ -44,11 +44,11 @@ object builder {
 
   @targetName("statementOperator")
   def statement(relation: String, arguments: (String, String)*)(using b: RuleBuilder): Unit = {
-    b.add(Statement(relation, arguments.map( (x, y) => x -> Reference(y) ).toMap))
+    b.add(RuleStatement(relation, arguments.map((x, y) => x -> Reference(y) ).toMap))
   }
 
   def statement(relation: String, arguments: (String, Atom)*)(using b: RuleBuilder): Unit = {
-    b.add(Statement(relation, arguments.toMap))
+    b.add(RuleStatement(relation, arguments.toMap))
   }
 
 }
