@@ -129,6 +129,16 @@ class ListTests {
     Assertions.assertEquals(1, cnt)
     Assertions.assertEquals(List(1, 2, 3, 4), res)
 
+    result.value = Some(List(1, 2, 3, 4))
+
+    cnt = 0
+    db.query("append", binding) {
+      cnt += 1
+      true
+    }
+
+    Assertions.assertEquals(1, cnt)
+
   }
 
   @Test
@@ -163,6 +173,16 @@ class ListTests {
     db.query("reverse", binding) {
       val r = result.resolve.asInstanceOf[List[?]]
       Assertions.assertEquals(List(1, 2, 3), r)
+      res += 1
+      true
+    }
+
+    Assertions.assertEquals(1, res)
+
+    result.value = Some(List(1, 2, 3))
+
+    res = 0
+    db.query("reverse", binding) {
       res += 1
       true
     }
