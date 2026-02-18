@@ -3,16 +3,16 @@ package org.theta.solver
 object Binding {
 
   def apply(arguments:Map[String, Variable], parent:Binding): Binding = {
-    new Binding(arguments, parent.database )
+    new Binding(arguments, parent.queryable )
   }
 
-  def apply(arguments:Map[String, Variable], database: Database): Binding = {
+  def apply(arguments:Map[String, Variable], database: Queryable): Binding = {
     new Binding(arguments, database)
   }
 
 }
 
-class Binding(val state:Map[String, Variable], val database: Database) extends Queryable {
+class Binding(val state:Map[String, Variable], val queryable: Queryable) extends Queryable {
 
   def push[T](block : => T): T = {
     val values = state.map { (key, value) =>
@@ -35,7 +35,7 @@ class Binding(val state:Map[String, Variable], val database: Database) extends Q
   def apply(key:String): Variable = state(key)
 
   override def query(test: Clause => Boolean): Iterable[Clause] = {
-    database.query(test)
+    queryable.query(test)
   }
 
 }
