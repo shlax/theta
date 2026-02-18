@@ -7,9 +7,9 @@ import scala.annotation.targetName
 
 object builder {
 
-  def not(term: Statement): NotStatement = NotStatement(term)
-
-  //def forEach(terms: Term*): ForEachTerm = ForEachTerm(terms)
+  def not(term: Statement): NotStatement = {
+    NotStatement(term)
+  }
 
   def database(init: DatabaseBuilder ?=> Unit): Database = {
     given db : DatabaseBuilder = new DatabaseBuilder()

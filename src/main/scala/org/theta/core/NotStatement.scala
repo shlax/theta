@@ -4,8 +4,6 @@ import org.theta.solver.{Binding, Statement, Term}
 
 class NotStatement(val statement: Statement) extends Statement{
 
-  override def relation: String = statement.relation
-
   override def arguments: Set[String] = statement.arguments
 
   override def variables: Set[String] = statement.variables
