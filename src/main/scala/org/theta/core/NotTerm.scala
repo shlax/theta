@@ -2,15 +2,7 @@ package org.theta.core
 
 import org.theta.solver.{Binding, Term}
 
-object NotStatement {
-
-  def not(t:Term): NotStatement = {
-    NotStatement(t)
-  }
-
-}
-
-class NotStatement(val term: Term) extends Term{
+class NotTerm(val term: Term) extends Term{
 
   override def relation: String = term.relation
   override def arguments: Set[String] = term.arguments

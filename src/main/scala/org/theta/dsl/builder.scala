@@ -1,10 +1,13 @@
 package org.theta.dsl
 
-import org.theta.solver.{Atom, Clause, Database, Fact, Reference, Statement, Value}
+import org.theta.core.NotTerm
+import org.theta.solver.{Atom, Clause, Database, Fact, Reference, Statement, Term, Value}
 
 import scala.annotation.targetName
 
 object builder {
+
+  def not(term: Term): NotTerm = NotTerm(term)
 
   def database(init: DatabaseBuilder ?=> Unit): Database = {
     given db : DatabaseBuilder = new DatabaseBuilder()
