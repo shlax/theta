@@ -1,7 +1,7 @@
 package org.theta.dsl
 
 import org.theta.core.NotStatement
-import org.theta.solver.{Atom, Clause, Database, Fact, Reference, RuleStatement, Statement, Term, Value}
+import org.theta.solver.{Atom, Clause, Database, Fact, Reference, RuleStatement, Statement, Value}
 
 import scala.annotation.targetName
 
