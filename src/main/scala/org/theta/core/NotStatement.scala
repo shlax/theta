@@ -1,6 +1,6 @@
 package org.theta.core
 
-import org.theta.solver.{Binding, Statement, Term}
+import org.theta.solver.{Binding, Statement}
 
 class NotStatement(val statement: Statement) extends Statement{
 
