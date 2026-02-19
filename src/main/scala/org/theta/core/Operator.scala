@@ -1,5 +1,11 @@
 package org.theta.core
 
-import org.theta.solver.{Reference, Rule}
+import org.theta.solver.Clause
 
-class Operator(name:String, arguments:String *) extends Rule(name, arguments.map(x => x -> Reference(x)).toMap )
+abstract class Operator(name:String, args:String *) extends Clause{
+
+  override def relation: String = name
+
+  override def arguments: Set[String] = args.toSet
+
+}
