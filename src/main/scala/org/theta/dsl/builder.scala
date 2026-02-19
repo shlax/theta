@@ -38,8 +38,8 @@ object builder {
     b.add(rb.build())
   }
 
-  def add(statement: Statement)(using b: RuleBuilder): Unit = {
-    b.add(statement)
+  def add(statement: Statement*)(using b: RuleBuilder): Unit = {
+    for(s <- statement) b.add(s)
   }
 
   @targetName("statementOperator")
